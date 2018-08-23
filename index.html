@@ -1,4 +1,4 @@
-<html>
+	<html>
 	<head>
 		<style>
 		body{
@@ -24,8 +24,18 @@
 		<script>
 
 
-			var multiverseids = ["Nissa, Nature's Artisan","Consulate Turret","Woodland Stream","Woodweaver's Puzzleknot","Glassblower's Puzzleknot"]; 
-			var options;
+			var multiverseids, options;
+			var jqxhr = $.get({url:"./cards.json", function(data, status){
+				
+			}})
+			.done(function(data,status) {
+				multiverseids = data.cards;
+				console.log(multiverseids);
+				
+			})
+			.fail(function(e) {
+				console.log( "error " + JSON.stringify(e) );
+			});
 			$.get("./options.json", function(data, status){
 							//console.log(status);
 							options = (data);
