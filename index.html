@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<style>
+		body{
+			color:#fff;
+			background: Url("http://gatherer.wizards.com/Images/background/Gray_Patterned_BG.jpg");
+			
+		}
+		div{
+			margin-top: 200px;
+		}
+	
+		.rulings:before{
+			content: "ruling --> "
+		}
+		body div:first-of-type {
+			margin-top: 50px;
+		}
+		
+		
+		
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script>
+
+
+			var multiverseids = ["Nissa, Nature's Artisan","Consulate Turret","Woodland Stream","Woodweaver's Puzzleknot","Glassblower's Puzzleknot"]; 
+			var options;
+			$.get("./options.json", function(data, status){
+							//console.log(status);
+							options = (data);
+				});
+			$(document).ready(function(){
+				//console.log(options);
+				for(var id in multiverseids){
+					//$("button").click(function(){
+					
+					
+					$.get("https://api.magicthegathering.io/v1/cards?name="/*multiverseid=*/+multiverseids[id], function(data, status){
+						var div = $("<div class =\"card\"id = " +multiverseids[id]+">");
+						div.append("<img src = \"" + data.cards[0].imageUrl + "\" >");
+						for(var p in data.cards[0]){
+							if(options[p]){
+								switch(p){
+									case"setName":{
+										div.append("<p class="+p+">set:"+data.cards[0][p]+"</p>");
+										break;
+									}
+									case"legalities":{
+										for(var pp in data.cards[0][p]){
+											div.append("<p class="+data.cards[0][p][pp].format	+">"+data.cards[0][p][pp].format+" : "+data.cards[0][p][pp].legality+"</p>");
+										}
+										break;
+									}
+									case "rulings" : {
+											for(var pp in data.cards[0][p]){
+												//console.log(data.cards[0][p][pp])
+												div.append("<p class="+ p +">"+data.cards[0][p][pp].date+" : "+data.cards[0][p][pp].text +"</p>");
+											}											
+											break;
+										}
+									default:{
+										div.append("<p class="+p+">"+p+": "+data.cards[0][p]+"</p>");
+									}
+								}
+							}else{
+								//console.log(p)
+							}
+						}
+						$("body").append(div);
+					});
+				}//);
+			});
+		</script>
+	
+	</head>
+	<body>
+		<h1> green energy counter deck</h1>
+	</body>
+</html>
